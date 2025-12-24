@@ -19,7 +19,7 @@ import java.util.Set;
 public class UserInfo {
 
     @Id
-    @Column(name = "User_id")
+    @Column(name = "user_id")
     private String userId;
 
     private String username;
