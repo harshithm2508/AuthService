@@ -15,11 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "users")
 public class UserInfo {
-
-    public String getUserId() {
-        return userId;
-    }
 
     @Id
     @Column(name = "User_id")
@@ -27,31 +24,7 @@ public class UserInfo {
 
     private String username;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     private String password;
-
-    public Set<UserRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
-    }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -60,4 +33,5 @@ public class UserInfo {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<UserRole> roles = new HashSet<>();
+
 }
