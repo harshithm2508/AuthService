@@ -2,6 +2,7 @@ package com.example.AuthService.service;
 
 
 import com.example.AuthService.entities.UserInfo;
+import com.example.AuthService.model.UserInfoDto;
 import com.example.AuthService.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -31,5 +36,19 @@ public class UserDetailsServiceImp implements UserDetailsService {
         }
 
         return new CustomUserDetails(user);
+    }
+
+    public UserInfo checkIfUserAlreadyExists(UserInfoDto userInfoDto){
+        return userRepository.findByUsername(userInfoDto.getUsername());
+    }
+
+    public Boolean signUpUser(UserInfoDto userInfoDto){
+        userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
+        if(Objects.nonNull(checkIfUserAlreadyExists(userInfoDto))){
+            return false;
+        }
+        String userId = UUID.randomUUID().toString();
+        userRepository.save(new UserInfo(userId, userInfoDto.getUsername(), userInfoDto.getPassword(), new HashSet<>()));
+        return true;
     }
 }
